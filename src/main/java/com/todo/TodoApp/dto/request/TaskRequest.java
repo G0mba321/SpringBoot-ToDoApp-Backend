@@ -1,10 +1,25 @@
 package com.todo.TodoApp.dto.request;
 
-import org.springframework.stereotype.Component;
+import jakarta.validation.constraints.FutureOrPresent;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 import java.time.LocalDateTime;
 
+@Getter
+@Setter
+@AllArgsConstructor
+@NoArgsConstructor
 public class TaskRequest {
-     public String taskName;
-     public LocalDateTime dateToComplete;
+
+    @NotBlank(message = "Name of task cannot be blank")
+    public String taskName;
+
+    @NotNull(message = "cannot be without time")
+    @FutureOrPresent
+    public LocalDateTime dateToComplete;
 }

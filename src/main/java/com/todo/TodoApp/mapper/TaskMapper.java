@@ -5,10 +5,7 @@ import com.todo.TodoApp.dto.response.TaskResponse;
 import com.todo.TodoApp.entity.Task;
 import org.mapstruct.Mapper;
 import org.mapstruct.MappingConstants;
-import org.springframework.context.annotation.Bean;
-import org.springframework.stereotype.Component;
-
-import java.util.List;
+import org.mapstruct.MappingTarget;
 
 @Mapper(componentModel = MappingConstants.ComponentModel.SPRING)
 public interface TaskMapper {
@@ -17,5 +14,6 @@ public interface TaskMapper {
 
     TaskResponse toResponse(Task entity);
 
-    List<TaskResponse> toResponseList(List<Task> taskEntity);
+    void updateTaskFromDto(TaskRequest request, @MappingTarget Task entity);
+
 }
