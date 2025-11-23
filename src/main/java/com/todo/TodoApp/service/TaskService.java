@@ -1,5 +1,6 @@
 package com.todo.TodoApp.service;
 
+import com.todo.TodoApp.dto.request.TaskRequest;
 import com.todo.TodoApp.entity.Task;
 import com.todo.TodoApp.repository.TaskRepository;
 import jakarta.transaction.Transactional;
@@ -35,12 +36,12 @@ public class TaskService {
     }
 
     @Transactional
-    public Task updateById(Long id, String taskName, LocalDateTime dateToComplete) {
+    public Task updateById(Long id, TaskRequest request) {
         Task updateTask = taskRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Task not found"));
 
-        updateTask.setTaskName(taskName);
-        updateTask.setDateToComplete(dateToComplete);
+        updateTask.setTaskName(request.taskName);
+        updateTask.setDateToComplete(request.dateToComplete);
 
         return taskRepository.save(updateTask);
     }
