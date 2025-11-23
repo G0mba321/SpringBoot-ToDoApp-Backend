@@ -1,5 +1,6 @@
 package com.todo.TodoApp.dto.request;
 
+import jakarta.validation.constraints.FutureOrPresent;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
@@ -19,5 +20,6 @@ public class TaskRequest {
     public String taskName;
 
     @NotNull(message = "cannot be without time")
+    @FutureOrPresent
     public LocalDateTime dateToComplete;
 }

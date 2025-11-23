@@ -1,14 +1,14 @@
 package com.todo.TodoApp.service;
 
-import com.todo.TodoApp.custom_exceptions.TaskNotFoundException;
 import com.todo.TodoApp.dto.request.TaskRequest;
 import com.todo.TodoApp.dto.response.TaskResponse;
 import com.todo.TodoApp.entity.Task;
+import com.todo.TodoApp.exceptions.TaskNotFoundException;
 import com.todo.TodoApp.mapper.TaskMapper;
 import com.todo.TodoApp.repository.TaskRepository;
-import jakarta.transaction.Transactional;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -35,7 +35,7 @@ public class TaskService {
         taskRepository.delete(deletedTask);
     }
 
-    @org.springframework.transaction.annotation.Transactional(readOnly = true)
+    @Transactional(readOnly = true)
     public List<TaskResponse> findAll() {
         return taskRepository.findAll().stream()
                 .map(taskMapper::toResponse)
@@ -46,12 +46,11 @@ public class TaskService {
     public TaskResponse updateById(Long id, TaskRequest request) {
         Task updateTask = taskRepository.findById(id)
                 .orElseThrow(() -> new TaskNotFoundException(id));
-        updateTask.setTaskName(request.getTaskName());
-        updateTask.setDateToComplete(request.getDateToComplete());
 
-        Task savedTask = taskRepository.save(updateTask);
+        taskMapper.updateTaskFromDto(request, updateTask);
+        taskRepository.save(updateTask);
 
-        return taskMapper.toResponse(savedTask);
+        return taskMapper.toResponse(updateTask);
     }
 
     @Transactional

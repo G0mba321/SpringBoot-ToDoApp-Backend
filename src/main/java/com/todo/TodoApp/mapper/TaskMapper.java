@@ -5,6 +5,7 @@ import com.todo.TodoApp.dto.response.TaskResponse;
 import com.todo.TodoApp.entity.Task;
 import org.mapstruct.Mapper;
 import org.mapstruct.MappingConstants;
+import org.mapstruct.MappingTarget;
 
 @Mapper(componentModel = MappingConstants.ComponentModel.SPRING)
 public interface TaskMapper {
@@ -12,5 +13,7 @@ public interface TaskMapper {
     Task toEntity(TaskRequest request);
 
     TaskResponse toResponse(Task entity);
+
+    void updateTaskFromDto(TaskRequest request, @MappingTarget Task entity);
 
 }

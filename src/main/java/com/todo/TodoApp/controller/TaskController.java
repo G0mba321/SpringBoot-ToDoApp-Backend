@@ -20,7 +20,6 @@ public class TaskController {
         return taskService.findAll();
     }
 
-    @ResponseStatus(HttpStatus.OK)
     @GetMapping("/{id}")
     public TaskResponse getTaskById(@PathVariable Long id) {
         return taskService.findOneTask(id);
@@ -32,13 +31,11 @@ public class TaskController {
         return taskService.saveTask(request);
     }
 
-    @ResponseStatus(HttpStatus.OK)
     @PutMapping("/{id}")
     public TaskResponse updateTask(@RequestBody TaskRequest request, @PathVariable Long id) {
         return taskService.updateById(id, request);
     }
 
-    //+
     @ResponseStatus(HttpStatus.NO_CONTENT)
     @DeleteMapping("/{id}")
     public void deleteTask(@PathVariable Long id) {
