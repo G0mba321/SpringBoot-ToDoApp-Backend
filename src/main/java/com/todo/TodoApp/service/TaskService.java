@@ -8,14 +8,9 @@ import com.todo.TodoApp.mapper.TaskMapper;
 import com.todo.TodoApp.repository.TaskRepository;
 import jakarta.transaction.Transactional;
 import lombok.AllArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.annotation.ReadOnlyProperty;
 import org.springframework.stereotype.Service;
 
-import java.time.LocalDateTime;
-import java.util.Collection;
 import java.util.List;
-import java.util.stream.Collector;
 import java.util.stream.Collectors;
 
 @AllArgsConstructor
@@ -25,7 +20,6 @@ public class TaskService {
     private final TaskRepository taskRepository;
     private final TaskMapper taskMapper;
 
-    //+
     @Transactional
     public TaskResponse saveTask(TaskRequest request) {
         Task taskEntity = taskMapper.toEntity(request);
@@ -49,13 +43,21 @@ public class TaskService {
     }
 
     @Transactional
-    public Task updateById(Long id, TaskRequest request) {
+    public TaskResponse updateById(Long id, TaskRequest request) {
         Task updateTask = taskRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Task not found"));
+                .orElseThrow(() -> new TaskNotFoundException(id));
+        updateTask.setTaskName(request.getTaskName());
+        updateTask.setDateToComplete(request.getDateToComplete());
 
-        updateTask.setTaskName(request.taskName);
-        updateTask.setDateToComplete(request.dateToComplete);
+        Task savedTask = taskRepository.save(updateTask);
 
-        return taskRepository.save(updateTask);
+        return taskMapper.toResponse(savedTask);
+    }
+
+    @Transactional
+    public TaskResponse findOneTask(Long id) {
+        Task foundOne = taskRepository.findById(id)
+                .orElseThrow(() -> new TaskNotFoundException(id));
+        return taskMapper.toResponse(foundOne);
     }
 }
